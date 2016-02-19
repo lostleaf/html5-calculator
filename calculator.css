@@ -39,7 +39,7 @@ div#output {
 
 div#operator {
     font-size: 30px;
-    padding-left: 20px;
+    padding-left: 50px;
 }
 
 div.row {
@@ -75,7 +75,7 @@ button:active {
 
 button#btn-eq {
   float: right;
-  margin-right: 14px;
+  margin-right: 12px;
   height: 110px;
   padding-top: 60px;
 }
