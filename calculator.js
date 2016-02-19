@@ -50,4 +50,27 @@ $(document).ready(function() {
         has_dot = false;
         is_cleared = false;
     })
+    
+    $("#btn-eq").click(function() {
+        is_typing = false;
+        has_dot = false;
+        is_cleared = false;
+        var op = $("#operator").text();
+        if (op1_str !== "") {
+            var op1 = parseFloat(op1_str);
+            var op2 = parseFloat($("#output").text());
+            var result = NaN;
+            if (op === "+") 
+                result = op1 + op2;
+            if (op === "\u2212") //minus
+                result = op1 - op2;
+            if (op === "\u00d7") //times
+                result = op1 * op2;
+            if (op === "\u00f7") //divide
+                result = op1 / op2;
+            op1_str = "";
+            $("#operator").text("");
+            $("#output").text(result.toString());
+        }
+    });
 });
