@@ -1,19 +1,42 @@
+function evaluate(op, op1, op2) {
+    op1 = parseFloat(op1);
+    op2 = parseFloat(op2);
+    var result = NaN;
+    if (op === "+") 
+        result = op1 + op2;
+    if (op === "\u2212") //minus
+        result = op1 - op2;
+    if (op === "\u00d7") //times
+        result = op1 * op2;
+    if (op === "\u00f7") {//divide
+        if (op2 !== 0)
+            result = op1 / op2;
+    }
+    if (isNaN(result))
+        result = "Not a number";
+    return result;
+}
+
 $(document).ready(function() {
     var is_typing = false;
     var has_dot = false;
     var is_cleared = true;
     var op1_str = "";
+
     $(".btn-number").click(function() {
         is_cleared = false;
         var digit = $(this).text();
+        var output = $("#output").text();
         if (!is_typing) {
-            $("#output").text(digit);
-            is_typing = true;
+            if (digit !== "0" || output !== "0") {
+                output = digit;
+                is_typing = true;
+            }
         } else {
-            var output = $("#output");
-            if (output.text().length < 17)           
-                output.text(output.text() + digit);
+            if (output.length < 17)           
+                output = output + digit;
         }
+        $("#output").text(output);
     });
     
     $("#btn-clear").click(function() {
@@ -36,16 +59,21 @@ $(document).ready(function() {
     $("#btn-negate").click(function() {
         if (is_cleared) return;
         var output_str = $("#output").text().trim();
-        if (output_str[0] === "\u2212")
-            output_str = output_str.replace("\u2212", "");
+        if (output_str[0] === "-")
+            output_str = output_str.replace("-", "");
         else if (output_str !== '0')
-            output_str = "\u2212" + output_str;
+            output_str = "-" + output_str;
         $("#output").text(output_str);
     });
     
     $(".btn-operator").click(function () {
-        $("#operator").text($(this).text());
+        if (op1_str !== "") {
+            var result = evaluate($("#operator").text(), op1_str, $("#output").text());
+            $("#output").text(result);
+            op1_str = "";
+        }
         op1_str = $("#output").text();
+        $("#operator").text($(this).text());
         is_typing = false;
         has_dot = false;
         is_cleared = false;
@@ -57,17 +85,7 @@ $(document).ready(function() {
         is_cleared = false;
         var op = $("#operator").text();
         if (op1_str !== "") {
-            var op1 = parseFloat(op1_str);
-            var op2 = parseFloat($("#output").text());
-            var result = NaN;
-            if (op === "+") 
-                result = op1 + op2;
-            if (op === "\u2212") //minus
-                result = op1 - op2;
-            if (op === "\u00d7") //times
-                result = op1 * op2;
-            if (op === "\u00f7") //divide
-                result = op1 / op2;
+            var result = evaluate(op, op1_str, $("#output").text())
             op1_str = "";
             $("#operator").text("");
             $("#output").text(result.toString());
